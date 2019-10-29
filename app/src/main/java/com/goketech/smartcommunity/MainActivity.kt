@@ -3,6 +3,10 @@ package com.goketech.smartcommunity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import com.goketech.smartcommunity.view.event.EventFragment
+import com.goketech.smartcommunity.view.login.home.HomeFragment
+import com.goketech.smartcommunity.view.my.MyFragment
+import com.goketech.smartcommunity.view.notifications.NotificationsFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -15,11 +19,15 @@ class MainActivity : AppCompatActivity() {
                 //textMessage.setText(R.string.title_home)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
+            R.id.navigation_notifications -> {
                 //textMessage.setText(R.string.title_dashboard)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
+            R.id.navigation_event -> {
+                //textMessage.setText(R.string.title_notifications)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_my -> {
                 //textMessage.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true
             }
@@ -38,6 +46,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initFragment(){
+        var homeFragment = HomeFragment()
+        var notificationsFragment = NotificationsFragment()
+        var eventFragment = EventFragment()
+        var myFragment = MyFragment()
+
+        supportFragmentManager.beginTransaction().replace(R.id.layout_page, homeFragment!!).commit()
 
     }
 }
