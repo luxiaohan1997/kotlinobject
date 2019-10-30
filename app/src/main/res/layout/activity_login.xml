@@ -39,6 +39,7 @@
                     android:id="@+id/txt_loginCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:autoLink="all"
                     android:background="@drawable/txt_selector"
                     android:enabled="false"
@@ -47,13 +48,16 @@
                     android:paddingRight="20dp"
                     android:paddingBottom="10dp"
                     android:text="验证码登录"
+                    android:gravity="center"
                     android:textColor="@drawable/txt_color_selector"
-                    android:textSize="24sp"/>
+                    android:textSize="20sp"/>
 
             <TextView
                     android:id="@+id/txt_loginPw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:autoLink="all"
                     android:background="@drawable/txt_selector"
                     android:enabled="true"
@@ -63,7 +67,7 @@
                     android:paddingBottom="10dp"
                     android:text="密码登录"
                     android:textColor="@drawable/txt_color_selector"
-                    android:textSize="24sp"/>
+                    android:textSize="20sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -93,7 +97,7 @@
                         android:hint="@string/txt_login_phone_tips"
                         android:minHeight="50dp"
                         android:padding="20dp"
-                        android:textColor="@color/white"
+                        android:textColor="@color/hint_color"
                         android:textSize="24sp"/>
             </LinearLayout>
 
@@ -113,7 +117,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginRight="20dp"
                     android:background="@drawable/txt_login_btn_bg"
                     android:gravity="center"
@@ -126,13 +130,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="28dp"
                     android:layout_marginRight="20dp"
                     android:gravity="center"
                     android:text="@string/txt_login_other"
                     android:textColor="@color/colorGray"
                     android:textSize="18sp"/>
             <ImageView
+                    android:id="@+id/wechat"
                     android:layout_marginTop="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
