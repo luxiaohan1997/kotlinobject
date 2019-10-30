@@ -10,30 +10,33 @@ import android.text.TextUtils
 import android.view.TextureView
 import android.view.View
 import android.widget.Toast
-import com.goketech.smartcommunity.R
 import com.goketech.smartcommunity.base.BaseActivity
 import com.goketech.smartcommunity.constants.Constant
 import com.goketech.smartcommunity.interfaces.login.LoginConstact
 import com.goketech.smartcommunity.model.bean.LoginBean
 import com.goketech.smartcommunity.presenter.login.LoginPresenter
 import com.goketech.smartcommunity.utils.MyUtils
+import com.tencent.mm.opensdk.modelmsg.SendAuth
+import com.tencent.mm.opensdk.openapi.IWXAPI
+import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import kotlinx.android.synthetic.main.activity_login.*
-import okhttp3.FormBody
-import okhttp3.MediaType
-import okhttp3.RequestBody
+
 
 class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),LoginConstact.View, View.OnClickListener {
 
 
-    var mode = "1"
+    var mode = "2"
     var phone = ""
     var password = ""
     var code = ""
+    var api: IWXAPI? = null
 
     override fun initView() {
         txt_loginCode.setOnClickListener(this)
         txt_loginPw.setOnClickListener(this)
         txt_getverify.setOnClickListener(this)
+        wechat.setOnClickListener(this)
+
     }
 
     override fun initData() {
@@ -46,36 +49,62 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
 
 
     override val layout: Int
-        get() = R.layout.activity_login
+        get() = com.goketech.smartcommunity.R.layout.activity_login
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onClick(v: View?) {
         when(v!!.id){
-            R.id.txt_loginCode ->{
+            com.goketech.smartcommunity.R.id.txt_loginCode ->{
                 mode = "1"
                 layout_verify.visibility = View.VISIBLE
                 layout_pw.visibility = View.GONE
                 txt_loginCode.isEnabled = false
                 txt_loginPw.isEnabled = true
             }
-            R.id.txt_loginPw -> {
+            com.goketech.smartcommunity.R.id.txt_loginPw -> {
                 mode = "2"
                 layout_verify.visibility = View.GONE
                 layout_pw.visibility = View.VISIBLE
                 txt_loginCode.isEnabled = true
                 txt_loginPw.isEnabled = false
             }
-            R.id.txt_login -> {
+            com.goketech.smartcommunity.R.id.txt_login -> {
                 saveLogin()
             }
-            R.id.txt_getverify -> {
+            //手机号码判断
+            com.goketech.smartcommunity.R.id.txt_getverify -> {
                 phone = txt_codePhone.text.toString()
-                var intent = Intent()
-                intent.setClass(context,CodeActivity::class.java)
-                intent.putExtra("phone",phone)
-                startActivity(intent)
+                if(!TextUtils.isEmpty(phone)){
+                    if(!MyUtils.checkMoblie(phone)){
+                        Toast.makeText(this,getString(com.goketech.smartcommunity.R.string.tips_phone),Toast.LENGTH_SHORT).show()
+                        return;
+                    }else{
+                        var intent = Intent()
+                        intent.setClass(context,CodeActivity::class.java)
+                        intent.putExtra("phone",phone)
+                        startActivity(intent)
+                        Toast.makeText(this,getString(com.goketech.smartcommunity.R.string.txt_login_ok),Toast.LENGTH_SHORT).show()
+                    }
+                }else{
+                        Toast.makeText(this,getString(com.goketech.smartcommunity.R.string.txt_login_phone_hint),Toast.LENGTH_SHORT).show()
+                }
+
             }
+            //微信判断
+            com.goketech.smartcommunity.R.id.wechat ->{
+                api = WXAPIFactory.createWXAPI(this, "wx9da9b470bcb8c751", true)
+                if (!api!!.isWXAppInstalled()) {
+                    Toast.makeText(this, "您还未安装微信客户端！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                val req = SendAuth.Req()
+                req.scope = "snsapi_userinfo"
+                req.state = "wx_login_duzun"
+                api!!.sendReq(req)
+            }
+
+
 
         }
     }
@@ -87,11 +116,11 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
         if(mode.equals("1")){
             if(!TextUtils.isEmpty(phone)){
                 if(!MyUtils.checkMoblie(phone)){
-                    Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,getString(com.goketech.smartcommunity.R.string.tips_phone),Toast.LENGTH_SHORT).show()
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,getString(com.goketech.smartcommunity.R.string.tips_phone),Toast.LENGTH_SHORT).show()
                     return;
                 }
                 var param = HashMap<String,String>()
@@ -100,16 +129,16 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
                 param.put("password",password)
                 sendLoginData(param)
             }else{
-                Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,getString(com.goketech.smartcommunity.R.string.tips_phone),Toast.LENGTH_SHORT).show()
             }
         }else if(mode.equals("2")){
             if(!TextUtils.isEmpty(phone)){
                 if(!MyUtils.checkMoblie(phone)){
-                    Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,getString(com.goketech.smartcommunity.R.string.tips_phone),Toast.LENGTH_SHORT).show()
                     return;
                 }
                 if(TextUtils.isEmpty(code)){
-                    Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,getString(com.goketech.smartcommunity.R.string.tips_phone),Toast.LENGTH_SHORT).show()
                     return;
                 }
                 var param = HashMap<String,String>()
@@ -118,7 +147,7 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
                 param.put("code",code)
                 sendLoginData(param)
             }else{
-                Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,getString(com.goketech.smartcommunity.R.string.tips_phone),Toast.LENGTH_SHORT).show()
             }
         }
     }

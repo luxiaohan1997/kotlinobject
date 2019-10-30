@@ -15,7 +15,23 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+
+        debug {
+            storeFile file('goke.jks')
+            storePassword "goke123"
+            keyAlias "key0"
+            keyPassword "goke123"
+        }
+    }
     buildTypes {
+        debug {
+            //在debug模式下引用该签名文件
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+            proguardFiles 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
