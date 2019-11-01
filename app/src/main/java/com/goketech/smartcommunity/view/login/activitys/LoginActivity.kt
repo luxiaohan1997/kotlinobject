@@ -53,7 +53,6 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
     override val layout: Int
         get() = R.layout.activity_login
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onClick(v: View?) {
         when(v!!.id){

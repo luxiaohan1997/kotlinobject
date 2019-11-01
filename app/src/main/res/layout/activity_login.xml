@@ -162,6 +162,18 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+            >
+                <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/shoujihaoma_3x"
+                        android:layout_marginLeft="20dp"
+                />
+
             <EditText
                     android:id="@+id/txt_phone"
                     android:layout_width="match_parent"
@@ -176,6 +188,18 @@
                     android:paddingBottom="10dp"
                     android:textColor="@drawable/txt_color_selector"
                     android:textSize="24sp"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+            >
+                <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/mima_3x"
+                        android:layout_marginLeft="20dp"
+                />
 
             <EditText
                     android:id="@+id/txt_pw"
@@ -192,6 +216,8 @@
                     android:paddingBottom="10dp"
                     android:textColor="@drawable/txt_color_selector"
                     android:textSize="24sp"/>
+
+            </LinearLayout>
 
             <TextView
                     android:id="@+id/txt_forgetPw"
