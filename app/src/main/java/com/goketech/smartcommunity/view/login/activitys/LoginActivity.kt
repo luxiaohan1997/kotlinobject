@@ -14,6 +14,7 @@ import com.goketech.smartcommunity.R
 import com.goketech.smartcommunity.base.BaseActivity
 import com.goketech.smartcommunity.constants.Constant
 import com.goketech.smartcommunity.interfaces.login.LoginConstact
+import com.goketech.smartcommunity.model.bean.CodeBean
 import com.goketech.smartcommunity.model.bean.LoginBean
 import com.goketech.smartcommunity.presenter.login.LoginPresenter
 import com.goketech.smartcommunity.utils.MyUtils
@@ -26,6 +27,7 @@ import okhttp3.MediaType
 import okhttp3.RequestBody
 
 class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),LoginConstact.View, View.OnClickListener {
+
 
 
     var mode = "2"
@@ -76,6 +78,10 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
             //判断手机号
             R.id.txt_getverify -> {
                 phone = txt_codePhone.text.toString()
+                val hashMap = HashMap<String, String>()
+                hashMap.put("phone",phone)
+                val sign = MyUtils.getSign(hashMap)
+                System.out.println("tag签名=============>"+sign)
                 if(!TextUtils.isEmpty(phone)){
                     if(!MyUtils.checkMoblie(phone)){
                         Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
@@ -84,6 +90,7 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
                         var intent = Intent()
                         intent.setClass(context,CodeActivity::class.java)
                         intent.putExtra("phone",phone)
+                        intent.putExtra("sign",sign)
                         startActivity(intent)
                         Toast.makeText(this,getString(R.string.txt_login_ok),Toast.LENGTH_SHORT).show()
                     }
@@ -141,9 +148,9 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
                     return;
                 }
                 var param = HashMap<String,String>()
-                param.put("mode",mode)
-                param.put("phone",phone)
-                param.put("code",code)
+//                param.put("mode",mode)
+//                param.put("phone",phone)
+//                param.put("code",code)
                 sendLoginData(param)
             }else{
                 Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
@@ -163,6 +170,12 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
         }
     }
 
+    override fun codeReturn(result: CodeBean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
+    override fun passWordReturn(result: CodeBean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 }

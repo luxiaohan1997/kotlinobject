@@ -12,11 +12,18 @@ import kotlinx.android.synthetic.main.activity_code.*
 
 class CodeActivity: BaseActivity<LoginConstact.VerifyView, LoginConstact.VerifyPresenter>(), View.OnClickListener {
 
-    lateinit var phone:String
+//    lateinit var phone:String
+
+    var code=""
+    var mode="2"
+    var phone=""
+    var sign=""
 
     override fun initView() {
         txt_resetVerify.setOnClickListener(this)
         txt_verifyLogin.setOnClickListener(this)
+        phone=intent.getStringExtra("phone")
+        sign=intent.getStringExtra("sign")
     }
 
     override fun initData() {
@@ -46,14 +53,14 @@ class CodeActivity: BaseActivity<LoginConstact.VerifyView, LoginConstact.VerifyP
 
     fun getVerify(){
         if(!TextUtils.isEmpty(phone) && MyUtils.checkMoblie(phone)){
-            presenter!!.getCode(phone)
+//            presenter!!.getCode(phone)
         }else{
             showTipsShort(getString(R.string.tips_phone))
         }
     }
 
     fun sendLogin(){
-
+        code = verify_code.phoneCode
     }
 
 }

@@ -8,7 +8,7 @@ import com.goketech.smartcommunity.presenter.my.MyPresenter
 
 class MyFragment :BaseFragment<MyConstact.View,MyConstact.Presenter>(),MyConstact.View{
     override val layout: Int
-        get() = R.layout.fragment_my  //To change initializer of created properties use File | Settings | File Templates.
+        get() = R.layout.fragment_my
 
     override fun initView(view: View) {
     }
