@@ -1,5 +1,6 @@
 package com.goketech.smartcommunity.presenter.login
 
+import android.util.Log
 import com.goketech.smartcommunity.base.BasePresenter
 import com.goketech.smartcommunity.commonents.CommonSubscriber
 import com.goketech.smartcommunity.commonents.RxUtils
@@ -13,30 +14,21 @@ import okhttp3.RequestBody
 
 class LoginPresenter: BasePresenter<LoginConstact.View>(),LoginConstact.Presenter {
 
-    override fun cord(param: Map<String, String>) {
+    override fun getCode(phone: Map<String, String>) {
         addSubscribe(
-            HttpManager.getMyApi().getSmsCode(param)
+            HttpManager.getMyApi().getSmsCode(phone)
                 .compose(RxUtils.rxScheduler<CodeBean>())
                 .subscribeWith(object: CommonSubscriber<CodeBean>(mView!!){
                     override fun onNext(t: CodeBean?) {
-                        mView!!.codeReturn(t!!)
+                        mView!!.getCodeReturn(t!!)
                     }
 
-                })
-        )
-    }
-
-    override fun passWord(param: Map<String, String>) {
-        addSubscribe(
-            HttpManager.getMyApi().setPassWord(param)
-                .compose(RxUtils.rxScheduler<CodeBean>())
-                .subscribeWith(object : CommonSubscriber<CodeBean>(mView!!) {
-                    override fun onNext(t: CodeBean?) {
-                        mView!!.passWordReturn(t!!)
+                    override fun onError(t: Throwable) {
+                        super.onError(t)
+                        Log.i("tag",t.toString());
                     }
 
-                })
-        )
+                }))
     }
 
     override fun login(param:Map<String,String>) {

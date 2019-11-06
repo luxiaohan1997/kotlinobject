@@ -21,10 +21,12 @@ import com.goketech.smartcommunity.utils.MyUtils
 import com.tencent.mm.opensdk.modelmsg.SendAuth
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
+import com.tencent.mm.opensdk.utils.Log
 import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.FormBody
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import kotlin.math.sign
 
 class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),LoginConstact.View, View.OnClickListener {
 
@@ -73,15 +75,14 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
                 txt_loginPw.isEnabled = false
             }
             R.id.txt_login -> {
-                saveLogin()
+//                saveLogin()
             }
             //判断手机号
             R.id.txt_getverify -> {
                 phone = txt_codePhone.text.toString()
-                val hashMap = HashMap<String, String>()
-                hashMap.put("phone",phone)
-                val sign = MyUtils.getSign(hashMap)
-                System.out.println("tag签名=============>"+sign)
+                yanzhengma()
+
+//                System.out.println("tag签名=============>"+sign)
                 if(!TextUtils.isEmpty(phone)){
                     if(!MyUtils.checkMoblie(phone)){
                         Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
@@ -90,7 +91,8 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
                         var intent = Intent()
                         intent.setClass(context,CodeActivity::class.java)
                         intent.putExtra("phone",phone)
-                        intent.putExtra("sign",sign)
+//                        hashMap.put("phone",phone)
+//                        presenter!!.login(hashMap)
                         startActivity(intent)
                         Toast.makeText(this,getString(R.string.txt_login_ok),Toast.LENGTH_SHORT).show()
                     }
@@ -115,54 +117,72 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
         }
     }
 
-    fun saveLogin(){
-        phone = txt_phone.text.toString()
-        password = txt_pw.text.toString()
-        code = txt_loginCode.text.toString()
-        if(mode.equals("1")){
-            if(!TextUtils.isEmpty(phone)){
-                    if(!MyUtils.checkMoblie(phone)){
-                        Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
-                        return;
-                    }
-                if(TextUtils.isEmpty(password)){
-                    Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
-                    return;
-                }
-                var param = HashMap<String,String>()
-                param.put("mode",mode)
-                param.put("phone",phone)
-                param.put("password",password)
-                sendLoginData(param)
-            }else{
-                Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
-            }
-        }else if(mode.equals("2")){
-            if(!TextUtils.isEmpty(phone)){
-                if(!MyUtils.checkMoblie(phone)){
-                    Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
-                    return;
-                }
-                if(TextUtils.isEmpty(code)){
-                    Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
-                    return;
-                }
-                var param = HashMap<String,String>()
+    private fun yanzhengma() {
+        var store = HashMap<String, String>()  //定义map集合
+        store.put("phone", phone)
+        store.put("mode", "2")
+        var signature = MyUtils.getSign(store)  //生成签名
+        Log.i("sign",signature)
+        store.put("sign", signature!!)
+        presenter!!.getCode(store)
+    }
+
+//    fun saveLogin(){
+//        phone = txt_phone.text.toString()
+//        password = txt_pw.text.toString()
+//        code = txt_loginCode.text.toString()
+//        if(mode.equals("1")){
+//            if(!TextUtils.isEmpty(phone)){
+//                    if(!MyUtils.checkMoblie(phone)){
+//                        Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+//                        return;
+//                    }
+//                if(TextUtils.isEmpty(password)){
+//                    Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+//                    return;
+//                }
+//                var param = HashMap<String,String>()
 //                param.put("mode",mode)
 //                param.put("phone",phone)
-//                param.put("code",code)
-                sendLoginData(param)
-            }else{
-                Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
-            }
+//                param.put("password",password)
+//                sendLoginData(param)
+//            }else{
+//                Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+//            }
+//        }else if(mode.equals("2")){
+//            if(!TextUtils.isEmpty(phone)){
+//                if(!MyUtils.checkMoblie(phone)){
+//                    Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+//                    return;
+//                }
+//                if(TextUtils.isEmpty(code)){
+//                    Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+//                    return;
+//                }
+//                var param = HashMap<String,String>()
+////                param.put("mode",mode)
+////                param.put("phone",phone)
+////                param.put("code",code)
+//                sendLoginData(param)
+//            }else{
+//                Toast.makeText(this,getString(R.string.tips_phone),Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+
+    override fun getCodeReturn(result: CodeBean) {  //验证码
+        if(result.status == Constant.RESULT_CODE_SUCCESS){
+            Toast.makeText(context,"验证码",Toast.LENGTH_LONG).show()
         }
     }
+
 
     fun sendLoginData(request:Map<String,String>){
         presenter!!.login(request)
     }
 
     override fun loginReturn(result: LoginBean) {
+
         if(result.status == Constant.RESULT_CODE_SUCCESS){
             //跳转界面
         }else if(result.status == Constant.RESULT_CODE_NOSETPW){
@@ -170,12 +190,6 @@ class LoginActivity:BaseActivity<LoginConstact.View,LoginConstact.Presenter>(),L
         }
     }
 
-    override fun codeReturn(result: CodeBean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
-    override fun passWordReturn(result: CodeBean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
 }

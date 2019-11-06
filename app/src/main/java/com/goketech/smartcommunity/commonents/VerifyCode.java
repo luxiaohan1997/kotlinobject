@@ -134,10 +134,10 @@ public class VerifyCode extends RelativeLayout {
             code4 = codes.get(3);
         }
         if(codes.size()>=5){
-            code4 = codes.get(4);
+            code5 = codes.get(4);
         }
         if(codes.size()>=6){
-            code4 = codes.get(5);
+            code6 = codes.get(5);
         }
 
         tv_code1.setText(code1);
@@ -161,6 +161,8 @@ public class VerifyCode extends RelativeLayout {
         v2.setBackgroundColor(color_default);
         v3.setBackgroundColor(color_default);
         v4.setBackgroundColor(color_default);
+        v5.setBackgroundColor(color_default);
+        v6.setBackgroundColor(color_default);
         if(codes.size()==0){
             v1.setBackgroundColor(color_focus);
         }
@@ -174,10 +176,10 @@ public class VerifyCode extends RelativeLayout {
             v4.setBackgroundColor(color_focus);
         }
         if(codes.size()>=4){
-            v4.setBackgroundColor(color_focus);
+            v5.setBackgroundColor(color_focus);
         }
         if(codes.size()>=5){
-            v4.setBackgroundColor(color_focus);
+            v6.setBackgroundColor(color_focus);
         }
     }
 

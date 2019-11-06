@@ -23,6 +23,6 @@ object Constant {
 
 
     var RESULT_CODE_SUCCESS = 0
-    var RESULT_CODE_NOSETPW = 0
+    var RESULT_CODE_NOSETPW = 1
 
 }

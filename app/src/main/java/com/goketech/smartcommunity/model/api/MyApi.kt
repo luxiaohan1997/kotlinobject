@@ -18,7 +18,7 @@ interface MyApi {
 
     @POST("smsCode")
     @FormUrlEncoded
-    fun getSmsCode(@FieldMap param: Map<String, String>): Flowable<CodeBean>
+    fun  getSmsCode(@FieldMap phone: Map<String ,String>):Flowable<CodeBean>
 
     @POST("setPassword")
     @FormUrlEncoded
